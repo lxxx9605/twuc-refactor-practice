@@ -1,40 +1,26 @@
 package com.twu.refactoring;
 
 public class Direction {
-    private final char direction;
+    private final char[] directionList = {'N', 'E', 'S', 'W'};
+    private int directionIndex;
 
     public Direction(char direction) {
-        this.direction = direction;
+        for (int i = 0; i < directionList.length; i++) {
+            if (directionList[i] == direction) {
+                directionIndex = i;
+                break;
+            }
+        }
     }
 
     public Direction turnRight() {
-        switch (direction) {
-            case 'N':
-                return new Direction('E');
-            case 'S':
-                return new Direction('W');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
-        }
+        directionIndex = (directionIndex + 1) % 4;
+        return new Direction(directionList[directionIndex]);
     }
 
     public Direction turnLeft() {
-        switch (direction) {
-            case 'N':
-                return new Direction('W');
-            case 'S':
-                return new Direction('E');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
-        }
+        directionIndex = (directionIndex + 3) % 4;
+        return new Direction(directionList[directionIndex]);
     }
 
     @Override
@@ -44,18 +30,18 @@ public class Direction {
 
         Direction direction1 = (Direction) o;
 
-        if (direction != direction1.direction) return false;
+        if (directionIndex != direction1.directionIndex) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return (int) direction;
+        return (int) directionIndex;
     }
 
     @Override
     public String toString() {
-        return "Direction{direction=" + direction + '}';
+        return "Direction{direction=" + directionList[directionIndex] + '}';
     }
 }
